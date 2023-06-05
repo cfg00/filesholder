@@ -722,13 +722,16 @@ def apply_deconv(imsm,psf=None,plt_val=False,parameters = {'method':'wiener','be
     elif method=='spitfire':
         from sdeconv.deconv import Spitfire
         filter_ = Spitfire(psf, weight=0.6, reg=0.995, gradient_step=0.01, precision=1e-6, pad=pad)
+    
     out_image = filter_(imsm_)
-    out_image = out_image.cpu().detach().numpy().astype(np.float32)
+     
+    #out_image = out_image.cpu().detach().numpy().astype(np.float32)
+    out_image_ = out_image.cpu().detach().numpy().astype(np.float32)
     if plt_val:
         import napari
-        viewer = napari.view_image(out_image)
+        viewer = napari.view_image(out_image_)
         viewer.add_image(imsm)
-    return out_image
+    return out_image_
 def get_local_maxfast(im_dif,th_fit,im_raw=None,dic_psf=None,delta=1,delta_fit=3,sigmaZ=1,sigmaXY=1.5):
     z,x,y = np.where(im_dif>th_fit)
     zmax,xmax,ymax = im_dif.shape
